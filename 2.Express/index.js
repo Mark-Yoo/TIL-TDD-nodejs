@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 
+// custom middleware
 const logger = (req, res, next) => {
   console.log("Logger");
   next();
