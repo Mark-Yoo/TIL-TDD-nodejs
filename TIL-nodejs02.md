@@ -30,7 +30,7 @@ Node.js에서는 Mocha, should, superTest 등의 라이브러리 등을 사용�
 ### Should
 
 - Node의 assert 대신 서드파티 라이브러리를 사용 (assert는 외부 라이브러리를 이용한 테스트 케이스 제작을 위해 만들어진 모듈이다.) - 공식 문서에서도 assert를 테스트 코드에서 사용하지 말 것을 강조한다.
-
+- 현 버전의 공식문서에서는 assert에서 depreciated 된 코드들이 많다
 - Should는 검증(assertion) 라이브러리이다.
 - 가독성이 높은 테스트 코드를 만들 수 있다.
 
