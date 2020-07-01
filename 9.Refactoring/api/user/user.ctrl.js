@@ -1,10 +1,11 @@
 // api 로직
-let users = [
-  { id: 1, name: "Alice" },
-  { id: 2, name: "Grace" },
-  { id: 3, name: "Mathew" },
-  { id: 4, name: "Sammy" },
-];
+// let users = [
+//   { id: 1, name: "Alice" },
+//   { id: 2, name: "Grace" },
+//   { id: 3, name: "Mathew" },
+//   { id: 4, name: "Sammy" },
+// ];
+const models = require("../../models");
 
 const index = (req, res) => {
   req.query.limit = req.query.limit || 10;
@@ -12,7 +13,12 @@ const index = (req, res) => {
   if (Number.isNaN(limit)) {
     return res.status(400).end();
   }
-  res.json(users.slice(0, limit));
+  // 데이터를 줘야하는 부분
+  models.User.findAll({
+    limit: limit,
+  }).then((users) => {
+    res.json(users);
+  });
 };
 
 const show = (req, res) => {

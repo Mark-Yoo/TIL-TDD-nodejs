@@ -2,10 +2,19 @@
 const request = require("supertest");
 const should = require("should");
 const app = require("../../index");
+const models = require("../../models");
 
 describe("GET /users는", () => {
-  describe("성공시", () => {
+  describe.only("성공시", () => {
+    const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
     // 파라미터로 전달받dms done은 비동기로 동작하는 서버에 맞춰 비동기로 동작하게 만들어준다.
+    // only()를 사용하면 하나의 test case만 실행할 수 있다.
+    before(() => {
+      // mocha에서는 별도의 처리를 해주지 않아도 비동기 동작을 기다려준다.
+      return models.sequelize.sync({ force: true });
+    });
+    // 생성되기만하고 비어있는 데이터베이스에 자료를 채워넣기 위한 코드 (bulkCreate을 사용하면 큰 규모의 데어터를 생성하는 것이 가능하다.)
+    before(() => models.User.bulkCreate(users));
     it("유저 객체를 담은 배열로 응답", (done) => {
       request(app)
         .get("/users")
@@ -22,10 +31,10 @@ describe("GET /users는", () => {
           done();
         });
     });
-    describe("실패", () => {
-      it("limit이 숫자형이 아니면 400을 반환한다.", (done) => {
-        request(app).get("/users?limit=two").expect(400).end(done);
-      });
+  });
+  describe("실패", () => {
+    it("limit이 숫자형이 아니면 400을 반환한다.", (done) => {
+      request(app).get("/users?limit=two").expect(400).end(done);
     });
   });
 });
