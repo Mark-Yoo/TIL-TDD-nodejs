@@ -9,7 +9,10 @@ const sequelize = new Sequelize({
 // 모델을 정의
 const User = sequelize.define("User", {
   // id는 자동생성
-  name: Sequelize.DataTypes.STRING,
+  name: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
 });
 
 module.exports = { Sequelize, sequelize, User };

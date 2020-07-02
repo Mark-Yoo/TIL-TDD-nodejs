@@ -5,16 +5,16 @@ const app = require("../../index");
 const models = require("../../models");
 
 describe("GET /users는", () => {
-  describe.only("성공시", () => {
-    const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
-    // 파라미터로 전달받dms done은 비동기로 동작하는 서버에 맞춰 비동기로 동작하게 만들어준다.
-    // only()를 사용하면 하나의 test case만 실행할 수 있다.
-    before(() => {
-      // mocha에서는 별도의 처리를 해주지 않아도 비동기 동작을 기다려준다.
-      return models.sequelize.sync({ force: true });
-    });
-    // 생성되기만하고 비어있는 데이터베이스에 자료를 채워넣기 위한 코드 (bulkCreate을 사용하면 큰 규모의 데어터를 생성하는 것이 가능하다.)
-    before(() => models.User.bulkCreate(users));
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  // 파라미터로 전달받dms done은 비동기로 동작하는 서버에 맞춰 비동기로 동작하게 만들어준다.
+  // only()를 사용하면 하나의 test case만 실행할 수 있다.
+  before(() => {
+    // mocha에서는 별도의 처리를 해주지 않아도 비동기 동작을 기다려준다.
+    return models.sequelize.sync({ force: true });
+  });
+  // 생성되기만하고 비어있는 데이터베이스에 자료를 채워넣기 위한 코드 (bulkCreate을 사용하면 큰 규모의 데어터를 생성하는 것이 가능하다.)
+  before(() => models.User.bulkCreate(users));
+  describe("성공시", () => {
     it("유저 객체를 담은 배열로 응답", (done) => {
       request(app)
         .get("/users")
@@ -38,7 +38,12 @@ describe("GET /users는", () => {
     });
   });
 });
-describe("GET /users/1은", () => {
+describe("GET /users/:id는", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => {
+    return models.sequelize.sync({ force: true });
+  });
+  before(() => models.User.bulkCreate(users));
   describe("성공시", () => {
     it("id가 1인 유저 객체를 반환한다.", (done) => {
       request(app)
@@ -59,6 +64,11 @@ describe("GET /users/1은", () => {
   });
 });
 describe("DELETE /users/1은", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => {
+    return models.sequelize.sync({ force: true });
+  });
+  before(() => models.User.bulkCreate(users));
   describe("성공시", () => {
     it("204를 응답한다.", (done) => {
       request(app).delete("/users/1").expect(204).end(done);
@@ -71,6 +81,11 @@ describe("DELETE /users/1은", () => {
   });
 });
 describe("POST /users", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => {
+    return models.sequelize.sync({ force: true });
+  });
+  before(() => models.User.bulkCreate(users));
   describe("성공시", () => {
     let name = "daniel";
     let body;
@@ -96,11 +111,16 @@ describe("POST /users", () => {
       request(app).post("/users").send({}).expect(400).end(done);
     });
     it("name 중복 시 409을 반환한다", (done) => {
-      request(app).post("/users").send({ name: "Grace" }).expect(409).end(done);
+      request(app).post("/users").send({ name: "chris" }).expect(409).end(done);
     });
   });
 });
 describe("PUT /users/:id", () => {
+  const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
+  before(() => {
+    return models.sequelize.sync({ force: true });
+  });
+  before(() => models.User.bulkCreate(users));
   describe("성공시", () => {
     it("변경된 name을 응답한다.", (done) => {
       const name = "Dent";
