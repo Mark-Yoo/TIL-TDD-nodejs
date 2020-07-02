@@ -115,7 +115,7 @@ describe("POST /users", () => {
     });
   });
 });
-describe("PUT /users/:id", () => {
+describe.only("PUT /users/:id", () => {
   const users = [{ name: "alice" }, { name: "bek" }, { name: "chris" }];
   before(() => {
     return models.sequelize.sync({ force: true });
@@ -125,7 +125,7 @@ describe("PUT /users/:id", () => {
     it("변경된 name을 응답한다.", (done) => {
       const name = "Dent";
       request(app)
-        .put("/users/4")
+        .put("/users/2")
         .send({ name })
         .end((err, res) => {
           res.body.should.have.property("name", name);
@@ -149,7 +149,7 @@ describe("PUT /users/:id", () => {
       it("이름이 중복일 경우 409를 응답한다. ", (done) => {
         request(app)
           .put("/users/2")
-          .send({ name: "Grace" })
+          .send({ name: "alice" })
           .expect(409)
           .end(done);
       });
